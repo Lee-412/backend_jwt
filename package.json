@@ -1,0 +1,31 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "express jwt mysql",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "babel-node src/server.js",
+    "dev": "nodemon --exec npm start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Lee-412/backend_jwt.git"
+  },
+  "author": "lee duc",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Lee-412/backend_jwt/issues"
+  },
+  "homepage": "https://github.com/Lee-412/backend_jwt#readme",
+  "dependencies": {
+    "@babel/core": "7.15.4",
+    "@babel/node": "7.15.4",
+    "@babel/preset-env": "7.15.4",
+    "body-parser": "^1.20.2",
+    "dotenv": "^16.4.5",
+    "ejs": "^3.1.10",
+    "express": "4.19.2",
+    "nodemon": "2.0.15"
+  }
+}
