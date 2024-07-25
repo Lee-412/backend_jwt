@@ -1,4 +1,8 @@
 import express from "express";
+import homeController from "../controller/homeController";
+import userController from "../controller/userController";
+
+
 const router = express.Router();
 
 /**
@@ -6,10 +10,15 @@ const router = express.Router();
  * @param {*} app : express app 
  */
 
+
 const innitWebRoutes = (app) => {
-    router.get("/", (req, res) => {
-        return res.send("hello world");
-    })
+
+    // path, handle function
+    router.get("/", homeController.handleHomePage);
+
+    router.get("/user", userController.handleUserPage);
+
+    router.post("/users/create-user", userController.handleCreateUser)
     return app.use("/", router);
 }
 

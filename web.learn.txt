@@ -1,0 +1,9 @@
+1: Model - View - Controller
+=> Về bản chất: Khởi động dự án với Router ( url trên website ) ví dụ /user
+
++, route -> Controller Handle -> render View
+
+1.1: Model  
+1.2: View
+1.3: Controller
+
