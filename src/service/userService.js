@@ -1,16 +1,9 @@
 import mysql from 'mysql2/promise';
 import bcrypt from 'bcryptjs';
+import db from '../models/index'
+
 
 const salt = bcrypt.genSaltSync(10);
-
-const pool = mysql.createPool({
-    host: 'localhost',
-    user: 'root',
-    database: 'website_jwt',
-    waitForConnections: true,
-    connectionLimit: 10,
-    queueLimit: 0
-});
 
 const hashUserPassWord = (userPassWord) => {
     const hashPassWord = bcrypt.hashSync(userPassWord, salt);
@@ -18,77 +11,69 @@ const hashUserPassWord = (userPassWord) => {
 }
 
 const createNewUser = async (email, password, username) => {
-    const connection = await pool.getConnection();
-
     let hashpass = hashUserPassWord(password);
 
     try {
-        const [results] = await connection.query(
-            `INSERT INTO users(email, password, username) VALUES (?, ?, ?)`,
-            [email, hashpass, username]
-        );
-        console.log(results);
+        await db.User.create({
+            email: email,
+            password: hashpass,
+            username: username
+        })
     } catch (err) {
         console.error('Error creating user:', err);
     }
-    finally {
-        connection.release();
-    }
+
 }
 
 const getUserList = async () => {
-    const connection = await pool.getConnection();
-    let users = []
+    let user = []
     try {
-        const [results] = await connection.query(`SELECT * FROM users`);
-        users = results;
-        return users;
+        user = await db.User.findAll()
+        return user;
     } catch (err) {
         console.error('Error fetching user list:', err);
-        return users;
-    } finally {
-        connection.release();
+        return user;
     }
 }
 
 const deleteUser = async (userIndex) => {
-    const connection = await pool.getConnection();
+
     try {
-        const [results] = await connection.query(`DELETE FROM users WHERE id = ?`, [userIndex]);
-        return results;
+        await db.User.destroy({
+            where: { id: userIndex }
+        });
     } catch (err) {
         console.error('Error deleting user:', err);
-        return results;
-    } finally {
-        connection.release();
+
     }
 
 }
 const getUserById = async (userIndex) => {
-    const connection = await pool.getConnection();
+    let user = {}
     try {
-        const [results] = await connection.query(`SELECT * FROM users WHERE id = ?`, [userIndex]);
-        return results;
+        user = await db.User.findOne({ where: { id: userIndex } });
+        return user.get({ plain: true });
     } catch (err) {
         console.error('Error deleting user:', err);
         return results;
-    } finally {
-        connection.release();
     }
 
 }
 const updateUserInfor = async (email, username, userIndex) => {
-    const connection = await pool.getConnection();
     try {
-        const [results] = await connection.query(`UPDATE users
-SET email = ?, username = ?
-WHERE id=?;`, [email, username, userIndex]);
-        return (results);
+        await db.User.update({
+            email: email,
+            username: username,
+        },
+            {
+                where: {
+                    id: userIndex,
+                },
+            },
+        );
+
     } catch (err) {
-        console.error('Error deleting user:', err);
-        return (results);
-    } finally {
-        connection.release();
+        console.error('Error update user:', err);
     }
 
 }

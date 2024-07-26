@@ -12,21 +12,21 @@ module.exports = {
      * }], {});
     */
 
-    await queryInterface.bulkInsert('Users', [
+    await queryInterface.bulkInsert('User', [
       {
-        email: 'JohnDoe@gmail.com',
+        email: 'Leeduchht@gmail.com',
         password: '123456',
-        username: 'JohnDoe',
+        username: 'Lee Duc',
       },
       {
         email: 'fake1@gmail.com',
         password: '123456',
-        username: 'fack1',
+        username: 'fake1',
       },
       {
         email: 'fake2@gmail.com',
         password: '123456',
-        username: 'fack2',
+        username: 'fake2',
       }
     ], {});
 

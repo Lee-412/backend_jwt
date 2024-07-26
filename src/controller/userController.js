@@ -34,11 +34,10 @@ const handleGetUpdateUser = async (req, res) => {
     // console.log(req.params.id);
     let id = req.params.id;
     let user = await userService.getUserById(id);
+
     let dataUser = {};
-    if (user && user.length) {
-        // console.log(user[0].id, user[0].email, user[0].username);
-        dataUser = user[0];
-    }
+    dataUser = user;
+    console.log("check config user", user, dataUser);
     return res.render("user-update.ejs", { dataUser })
 }
 
@@ -49,6 +48,7 @@ const handleUpdateUser = async (req, res) => {
 
     // console.log(email, username, id);
     await userService.updateUserInfor(email, username, id);
+
     return res.redirect('/user')
 }
 module.exports = {
