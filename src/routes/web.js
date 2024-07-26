@@ -18,7 +18,13 @@ const innitWebRoutes = (app) => {
 
     router.get("/user", userController.handleUserPage);
 
-    router.post("/users/create-user", userController.handleCreateUser)
+    router.post("/users/create-user", userController.handleCreateUser);
+
+    router.post("/delete-user/:id", userController.handleDeleteUser);
+    router.get("/update-user/:id", userController.handleGetUpdateUser);
+
+    router.post("/users/update-user", userController.handleUpdateUser);
+
     return app.use("/", router);
 }
 

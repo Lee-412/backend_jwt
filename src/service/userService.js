@@ -51,7 +51,52 @@ const getUserList = async () => {
     }
 }
 
+const deleteUser = async (userIndex) => {
+    const connection = await pool.getConnection();
+    try {
+        const [results] = await connection.query(`DELETE FROM users WHERE id = ?`, [userIndex]);
+        return results;
+    } catch (err) {
+        console.error('Error deleting user:', err);
+        return results;
+    } finally {
+        connection.release();
+    }
+
+}
+const getUserById = async (userIndex) => {
+    const connection = await pool.getConnection();
+    try {
+        const [results] = await connection.query(`SELECT * FROM users WHERE id = ?`, [userIndex]);
+        return results;
+    } catch (err) {
+        console.error('Error deleting user:', err);
+        return results;
+    } finally {
+        connection.release();
+    }
+
+}
+const updateUserInfor = async (email, username, userIndex) => {
+    const connection = await pool.getConnection();
+    try {
+        const [results] = await connection.query(`UPDATE users
+SET email = ?, username = ?
+WHERE id=?;`, [email, username, userIndex]);
+        return (results);
+    } catch (err) {
+        console.error('Error deleting user:', err);
+        return (results);
+    } finally {
+        connection.release();
+    }
+
+}
+
 export default {
     createNewUser,
-    getUserList
+    getUserList,
+    deleteUser,
+    getUserById,
+    updateUserInfor
 }
