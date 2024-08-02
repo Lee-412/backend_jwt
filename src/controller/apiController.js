@@ -34,9 +34,9 @@ const handleRegister = async (req, res) => {
 
         if (data.EC === '0') {
             return res.status(200).json({
-                EM: `A user create successfully`,
-                EC: "0",
-                DT: ''
+                EM: `${data.EM}`,
+                EC: `${data.EC}`,
+                DT: `${data.DT}`
             })
         }
         else {
@@ -60,11 +60,36 @@ const handleRegister = async (req, res) => {
         return res.status(500).json({
             EM: "error",
             EC: "-1",
-            DT: 'Data is invalid'
+            DT: 'something wrong    '
+        })
+    }
+}
+
+const handleLogin = async (req, res) => {
+    console.log(req.body);
+
+    const data = await loginRegisterService.loginUser(req.body);
+    console.log("check login", data);
+
+    if (data.EC === '2') {
+
+        return res.status(500).json({
+            EM: `${data.EM}`,
+            EC: `${data.EC}`,
+            DT: data.DT
+        })
+
+    }
+    else {
+        return res.status(200).json({
+            EM: `${data.EM}`,
+            EC: `${data.EC}`,
+            DT: data.DT
         })
     }
 }
 module.exports = {
     testApi,
     handleRegister,
+    handleLogin,
 }

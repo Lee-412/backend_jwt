@@ -99,6 +99,85 @@ const registerNewUser = async (rawUserData) => {
 
 
 }
+
+
+
+const loginUser = async (rawUserData) => {
+
+    try {
+        let user = {};
+
+        let dataUser = await db.User.findOne({
+            where: {
+                email: rawUserData.userLogin
+            }
+        });
+        if (dataUser) {
+            user = dataUser.get({ plain: true })
+            console.log("chekc user email", user);
+        }
+        else {
+            let dataUser = await db.User.findOne({
+                where: {
+                    phone: rawUserData.userLogin
+                }
+            });
+
+            if (dataUser) {
+                user = dataUser.get({ plain: true })
+                console.log("chekc user phone number", user);
+            }
+            else {
+                return {
+                    EM: 'Incorrect account or password',
+                    EC: '-1',
+                    DT: ''
+                }
+            }
+        }
+
+        // check hash password
+        let hashPassWord = hashUserPassWord(rawUserData.password)
+
+
+        const match = await bcrypt.compare(rawUserData.password, user.password);
+
+        if (match) {
+            return {
+                EM: 'Login user succesfully',
+                EC: '0',
+                DT: {
+                    id: user.id,
+                    username: user.username,
+                    email: user.email,
+                    phone: user.phone,
+                    sex: user.sex,
+                    address: user.address,
+                    groupId: user.groupId
+                },
+            }
+        }
+        else {
+            return {
+                EM: 'Incorrect account or password',
+                EC: '-1',
+                DT: '',
+            }
+        }
+
+    } catch (err) {
+        console.log(err);
+        return {
+            EM: 'Something wrong is service',
+            EC: '-2',
+            DT: 'not found'
+        }
+    }
+
+
+}
+
 module.exports = {
     registerNewUser,
+    loginUser,
 }
