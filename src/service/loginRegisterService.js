@@ -1,5 +1,7 @@
 import db from "../models/index"
 import bcrypt from 'bcryptjs';
+import Op from "sequelize/lib/operators";
+
 
 const salt = bcrypt.genSaltSync(10);
 
@@ -109,7 +111,10 @@ const loginUser = async (rawUserData) => {
 
         let dataUser = await db.User.findOne({
             where: {
-                email: rawUserData.userLogin
+                [Op.or]: [
+                    { email: rawUserData.userLogin },
+                    { phone: rawUserData.userLogin }
+                ]
             }
         });
         if (dataUser) {
@@ -117,28 +122,17 @@ const loginUser = async (rawUserData) => {
             console.log("chekc user email", user);
         }
         else {
-            let dataUser = await db.User.findOne({
-                where: {
-                    phone: rawUserData.userLogin
-                }
-            });
-
-            if (dataUser) {
-                user = dataUser.get({ plain: true })
-                console.log("chekc user phone number", user);
-            }
-            else {
-                return {
-                    EM: 'Incorrect account or password',
-                    EC: '-1',
-                    DT: ''
-                }
+            return {
+                EM: 'Incorrect account or password',
+                EC: '-1',
+                DT: ''
             }
         }
 
-        // check hash password
-        let hashPassWord = hashUserPassWord(rawUserData.password)
 
+
+        // check hash password
+        // let hashPassWord = hashUserPassWord(rawUserData.password)
 
         const match = await bcrypt.compare(rawUserData.password, user.password);
 

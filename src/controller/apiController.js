@@ -71,7 +71,7 @@ const handleLogin = async (req, res) => {
     const data = await loginRegisterService.loginUser(req.body);
     console.log("check login", data);
 
-    if (data.EC === '2') {
+    if (data.EC === '-2') {
 
         return res.status(500).json({
             EM: `${data.EM}`,

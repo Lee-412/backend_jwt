@@ -1,60 +1,180 @@
-import e from 'express';
-import userService from '../service/userService'
+import userApiService from '../service/userApiService'
 
-
-const handleCreateUser = async (req, res) => {
+const getUserListController = async (req, res) => {
     try {
-        // Uncomment and use the values from req.body as needed
-        let username = req.body.userName;
-        let password = req.body.password;
-        let email = req.body.emailName;
+        const data = await userApiService.handleGetUserList();
+        console.log("check log data", data);
 
-        await userService.createNewUser(email, password, username)
-        return res.redirect('/user')
+        if (data.EC === '2') {
+            return res.status(500).json({
+                EM: data.EM,
+                EC: data.EC,
+                DT: data.DT,
+            })
+        }
+        return res.status(200).json({
+            EM: data.EM,
+            EC: data.EC,
+            DT: data.DT,
+        })
 
     } catch (error) {
-        console.error('Error executing query', error);
-        return res.status(500).send("Error executing query");
+        console.log(error);
+        return res.status(500).json({
+            EM: 'Something wrong in server',
+            EC: '-2',
+            DT: '',
+        })
     }
 }
 
-const handleUserPage = async (req, res) => {
-    const dataUserList = await userService.getUserList();
-    // console.log(dataUserList);
-    return res.render("user.ejs", { dataUserList })
+const getUserController = async (req, res) => {
+    try {
+        let id = req.params.id;
+        console.log("check Id", id);
+
+        const data = await userApiService.getUserById(id);
+        console.log("check log data get user by ID", data);
+
+        if (data.EC === '2') {
+            return res.status(500).json({
+                EM: data.EM,
+                EC: data.EC,
+                DT: data.DT,
+            })
+        }
+        return res.status(200).json({
+            EM: data.EM,
+            EC: data.EC,
+            DT: data.DT,
+        })
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            EM: 'Something wrong in server',
+            EC: '-2',
+            DT: '',
+        })
+    }
 }
 
-const handleDeleteUser = async (req, res) => {
-    // console.log(req.params.id);
-    await userService.deleteUser(req.params.id);
-    return res.redirect('/user')
+const createUserController = async (req, res) => {
 
+    try {
+        const data = await userApiService.handleCreateNewUser(req.body)
+        if (data.EC === '2') {
+            return res.status(500).json({
+                EM: data.EM,
+                EC: data.EC,
+                DT: data.DT,
+            })
+        }
+        if (data.EC === '1') {
+            return res.status(200).json({
+                EM: data.EM,
+                EC: data.EC,
+                DT: data.DT,
+            })
+        }
+        return res.status(200).json({
+            EM: data.EM,
+            EC: data.EC,
+            DT: {
+                email: data.DT.email,
+                phone: data.DT.phone,
+                sex: data.DT.sex,
+                address: data.DT.address,
+                username: data.DT.username,
+                id: data.DT.id
+            },
+        })
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            EM: 'Something wrong in server',
+            EC: '-2',
+            DT: '',
+        })
+    }
 }
-const handleGetUpdateUser = async (req, res) => {
-    // console.log(req.params.id);
-    let id = req.params.id;
-    let user = await userService.getUserById(id);
 
-    let dataUser = {};
-    dataUser = user;
-    console.log("check config user", user, dataUser);
-    return res.render("user-update.ejs", { dataUser })
+const deleteUserController = async (req, res) => {
+    try {
+
+        const data = await userApiService.handleDeleteUser(req.body.id)
+
+        console.log("check data delete from server", data);
+
+        if (data.EC === '2') {
+            return res.status(500).json({
+                EM: data.EM,
+                EC: data.EC,
+                DT: data.DT,
+            })
+        }
+        if (data.EC === '1') {
+            return res.status(200).json({
+                EM: data.EM,
+                EC: data.EC,
+                DT: data.DT,
+            })
+        }
+        return res.status(200).json({
+            EM: data.EM,
+            EC: data.EC,
+            DT: data.DT,
+        })
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            EM: 'Something wrong in server',
+            EC: '-2',
+            DT: '',
+        })
+    }
 }
 
-const handleUpdateUser = async (req, res) => {
-    let email = req.body.email;
-    let username = req.body.username;
-    let id = req.body.id;
+const editUserController = async (req, res) => {
+    try {
+        console.log("check req edit user", req.body);
+        const data = await userApiService.updateUserInfor(req.body);
+        console.log("check log edit user", data);
 
-    // console.log(email, username, id);
-    await userService.updateUserInfor(email, username, id);
+        if (data.EC === '2') {
+            return res.status(500).json({
+                EM: data.EM,
+                EC: data.EC,
+                DT: data.DT,
+            })
+        }
+        if (data.EC === '1') {
+            return res.status(200).json({
+                EM: data.EM,
+                EC: data.EC,
+                DT: data.DT,
+            })
+        }
+        return res.status(200).json({
+            EM: data.EM,
+            EC: data.EC,
+            DT: data.DT,
+        })
+    } catch (error) {
+        console.log("something wrong in server", error);
+        return res.status(500).json({
+            EM: 'something wrong in server',
+            EC: '2',
+            DT: ''
+        })
 
-    return res.redirect('/user')
+    }
 }
+
 module.exports = {
-    handleCreateUser,
-    handleUserPage,
-    handleDeleteUser,
-    handleUpdateUser,
-    handleGetUpdateUser
+    getUserListController,
+    getUserController,
+    createUserController,
+    deleteUserController,
+    editUserController
 }

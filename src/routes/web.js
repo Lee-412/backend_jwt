@@ -1,6 +1,6 @@
 import express from "express";
 import homeController from "../controller/homeController";
-import userController from "../controller/userController";
+import userServerController from "../controller/userServerController";
 import apiController from "../controller/apiController";
 
 const router = express.Router();
@@ -16,14 +16,14 @@ const innitWebRoutes = (app) => {
     // path, handle function
     router.get("/", homeController.handleHomePage);
 
-    router.get("/user", userController.handleUserPage);
+    router.get("/user", userServerController.handleUserPage);
 
-    router.post("/users/create-user", userController.handleCreateUser);
+    router.post("/users/create-user", userServerController.handleCreateUser);
 
-    router.post("/delete-user/:id", userController.handleDeleteUser);
-    router.get("/update-user/:id", userController.handleGetUpdateUser);
+    router.post("/delete-user/:id", userServerController.handleDeleteUser);
+    router.get("/update-user/:id", userServerController.handleGetUpdateUser);
 
-    router.post("/users/update-user", userController.handleUpdateUser);
+    router.post("/users/update-user", userServerController.handleUpdateUser);
 
     return app.use("/", router);
 }
