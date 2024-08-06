@@ -82,6 +82,7 @@ const handleCreateNewUser = async (rawUserData) => {
             phone: rawUserData.phone,
             address: rawUserData.address,
             sex: rawUserData.sex,
+            groupId: rawUserData.groupId
         })
 
         console.log("check create user", create);
@@ -109,7 +110,7 @@ const handleGetUserList = async () => {
         let listUser = []
 
         listUser = await db.User.findAll({
-            attributes: ["id", "username", "phone", "sex", "address"],
+            attributes: ["id", "username", "email", "phone", "sex", "address"],
             include: {
                 model: db.Group,
                 attributes: ["id", "name", "description"],
