@@ -2,21 +2,55 @@ import userApiService from '../service/userApiService'
 
 const getUserListController = async (req, res) => {
     try {
-        const data = await userApiService.handleGetUserList();
-        console.log("check log data", data);
+        console.log("check query", req.query);
 
-        if (data.EC === '2') {
-            return res.status(500).json({
+        if (req.query.page && req.query.limit) {
+            let page = Number(req.query.page);
+            let limit = Number(req.query.limit);
+
+            if (isNaN(page) || isNaN(limit)) {
+                return res.status(200).json({
+                    EM: 'page and limit are invalid',
+                    EC: '1',
+                    DT: '',
+                })
+            }
+            console.log(page, limit);
+            const data = await userApiService.handleGetUserPagination(page, limit);
+            console.log("check log data", data);
+
+            if (data.EC === '2') {
+                return res.status(500).json({
+                    EM: data.EM,
+                    EC: data.EC,
+                    DT: data.DT,
+                })
+            }
+            return res.status(200).json({
                 EM: data.EM,
                 EC: data.EC,
                 DT: data.DT,
             })
+
         }
-        return res.status(200).json({
-            EM: data.EM,
-            EC: data.EC,
-            DT: data.DT,
-        })
+        else {
+            const data = await userApiService.handleGetUserList();
+            console.log("check log data", data);
+
+            if (data.EC === '2') {
+                return res.status(500).json({
+                    EM: data.EM,
+                    EC: data.EC,
+                    DT: data.DT,
+                })
+            }
+            return res.status(200).json({
+                EM: data.EM,
+                EC: data.EC,
+                DT: data.DT,
+            })
+
+        }
 
     } catch (error) {
         console.log(error);

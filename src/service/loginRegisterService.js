@@ -81,7 +81,8 @@ const registerNewUser = async (rawUserData) => {
             username: rawUserData.username,
             phone: rawUserData.phone,
             sex: rawUserData.sex,
-            address: rawUserData.address
+            address: rawUserData.address,
+            groupId: 3
         })
 
 

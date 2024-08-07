@@ -149,6 +149,56 @@ const handleGetUserList = async () => {
     }
 }
 
+
+const handleGetUserPagination = async (page, limit) => {
+    try {
+        const offset = (page - 1) * limit;
+
+        const { count, rows } = await db.User.findAndCountAll({
+            attributes: ["id", "username", "email", "phone", "sex", "address"],
+            include: {
+                model: db.Group,
+                attributes: ["id", "name", "description"],
+            },
+            limit: limit,
+            offset: offset,
+            raw: true,
+            nest: true,
+        });
+
+        console.log("check count", count);
+        console.log("check rows", rows);
+        let totalPage = Math.ceil(count / limit);
+        let data = {
+            totalRows: count,
+            totalPage: totalPage,
+            user: rows
+        }
+        if (rows.length > 0) {
+            return {
+                EM: 'Get user successfully',
+                EC: '0',
+                DT: data
+            };
+        } else {
+            return {
+                EM: 'No users found',
+                EC: '1',
+                DT: ''
+            };
+        }
+    } catch (err) {
+        console.log(err);
+
+        return {
+            EM: 'Something wrong in server',
+            EC: '2',
+            DT: '',
+        };
+    }
+};
+
+
 const handleDeleteUser = async (userIndex) => {
 
     try {
@@ -271,6 +321,7 @@ const handleChangePassword = () => {
 export default {
     handleCreateNewUser,
     handleGetUserList,
+    handleGetUserPagination,
     handleDeleteUser,
     getUserById,
     updateUserInfor
