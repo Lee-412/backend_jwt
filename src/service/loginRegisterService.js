@@ -1,8 +1,8 @@
 import db from "../models/index"
 import bcrypt from 'bcryptjs';
 import Op from "sequelize/lib/operators";
-
-
+import { getGroupWithRole } from './JWTService'
+import { createJWT } from '../middleware/jwtAction'
 const salt = bcrypt.genSaltSync(10);
 
 const hashUserPassWord = (userPassWord) => {
@@ -121,6 +121,43 @@ const loginUser = async (rawUserData) => {
         if (dataUser) {
             user = dataUser.get({ plain: true })
             console.log("chekc user email", user);
+
+            // check hash password
+            // let hashPassWord = hashUserPassWord(rawUserData.password)
+
+            const match = await bcrypt.compare(rawUserData.password, user.password);
+
+            if (match) {
+
+                let roles = await getGroupWithRole(user);
+
+                let payload = {
+                    id: user.id,
+                    username: user.username,
+                    email: user.email,
+                    phone: user.phone,
+                    role: roles,
+                    expiresIn: process.env.JWT_EXPIRESIN
+                }
+
+                const jwt = createJWT(payload)
+                return {
+                    EM: 'Login user succesfully',
+                    EC: '0',
+                    DT: {
+                        access_token: jwt,
+                        data: roles
+                    },
+                }
+            }
+            else {
+                return {
+                    EM: 'Incorrect account or password',
+                    EC: '-1',
+                    DT: '',
+                }
+            }
+
         }
         else {
             return {
@@ -132,40 +169,12 @@ const loginUser = async (rawUserData) => {
 
 
 
-        // check hash password
-        // let hashPassWord = hashUserPassWord(rawUserData.password)
-
-        const match = await bcrypt.compare(rawUserData.password, user.password);
-
-        if (match) {
-            return {
-                EM: 'Login user succesfully',
-                EC: '0',
-                DT: {
-                    id: user.id,
-                    username: user.username,
-                    email: user.email,
-                    phone: user.phone,
-                    sex: user.sex,
-                    address: user.address,
-                    groupId: user.groupId
-                },
-            }
-        }
-        else {
-            return {
-                EM: 'Incorrect account or password',
-                EC: '-1',
-                DT: '',
-            }
-        }
-
     } catch (err) {
         console.log(err);
         return {
             EM: 'Something wrong is service',
             EC: '-2',
-            DT: 'not found'
+            DT: 'not found loginRegisterService'
         }
     }
 

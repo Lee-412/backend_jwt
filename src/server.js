@@ -1,12 +1,17 @@
+require("dotenv").config();
+
 import express from "express";
 import innitWebRoutes from "./routes/web";
 import innitApiRoutes from "./routes/api";
 import configViewEngine from "./config/viewEngine";
 import bodyParser from 'body-parser';
 import configCors from './config/cors'
+import { createJWT } from './middleware/jwtAction'
+import { verifyJWT } from './middleware/jwtAction'
+import cookieParser from 'cookie-parser';
+
 // import connection from "./config/connectDB"
 
-require("dotenv").config();
 
 const app = express();
 const PORT = process.env.PORT || 8081;
@@ -24,11 +29,20 @@ configViewEngine(app);
 // test connection db
 // connection();
 
+// config cookie-parser
+app.use(cookieParser())
+
 //init web routers
 innitWebRoutes(app);
 innitApiRoutes(app);
 
 
+
+
+// middleware:  req => middleware => res
+app.use((req, res) => {
+    return res.send("404 not found");
+})
 app.listen(PORT, () => {
     console.log("Check app runing is port =" + PORT);
 })

@@ -20,6 +20,11 @@ const handleCreateUser = async (req, res) => {
 const handleUserPage = async (req, res) => {
     const dataUserList = await userService.getUserList();
     // console.log(dataUserList);
+    // Cookies that have not been signed
+    console.log('Cookies: ', req.cookies)
+    res.cookie("test", "test cookie123")
+    // Cookies that have been signed
+    console.log('Signed Cookies: ', req.signedCookies)
     return res.render("user.ejs", { dataUserList })
 }
 
