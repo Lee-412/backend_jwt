@@ -21,10 +21,9 @@ const handleUserPage = async (req, res) => {
     const dataUserList = await userService.getUserList();
     // console.log(dataUserList);
     // Cookies that have not been signed
-    console.log('Cookies: ', req.cookies)
-    res.cookie("test", "test cookie123")
+    // console.log('Cookies: ', req.cookies)
     // Cookies that have been signed
-    console.log('Signed Cookies: ', req.signedCookies)
+    // console.log('Signed Cookies: ', req.signedCookies)
     return res.render("user.ejs", { dataUserList })
 }
 
@@ -41,7 +40,7 @@ const handleGetUpdateUser = async (req, res) => {
 
     let dataUser = {};
     dataUser = user;
-    console.log("check config user", user, dataUser);
+    // console.log("check config user", user, dataUser);
     return res.render("user-update.ejs", { dataUser })
 }
 

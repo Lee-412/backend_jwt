@@ -14,7 +14,7 @@ const getGroupWithRole = async (user) => {
 
     })
 
-    console.log("check role user group", userRoleWithGroup);
+    // console.log("check role user group", userRoleWithGroup);
 
     return userRoleWithGroup ? userRoleWithGroup : {};
 }

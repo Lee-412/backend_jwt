@@ -48,11 +48,11 @@ const checkPhoneExists = async (data) => {
 const handleCreateNewUser = async (rawUserData) => {
 
     try {
-        console.log("check raw data", rawUserData);
-
+        // console.log("check raw data", rawUserData);
+        // 
         let isEmailExists = await checkEmailExists(rawUserData.email, 'email');
         if (isEmailExists === true) {
-            console.log('email is exitsts');
+            // console.log('email is exitsts');
             return {
                 EM: 'The Email is already exists',
                 EC: '-1',
@@ -62,7 +62,7 @@ const handleCreateNewUser = async (rawUserData) => {
         }
         let isPhoneExists = await checkPhoneExists(rawUserData.phone, 'phone');
         if (isPhoneExists === true) {
-            console.log('phone is exitsts');
+            // console.log('phone is exitsts');
 
             return {
                 EM: 'The phone number is already exists',
@@ -73,7 +73,7 @@ const handleCreateNewUser = async (rawUserData) => {
         }
 
         let hashpass = hashUserPassWord(rawUserData.password);
-        console.log('check password', hashpass);
+        // console.log('check password', hashpass);
 
         const create = await db.User.create({
             email: rawUserData.email,
@@ -85,7 +85,7 @@ const handleCreateNewUser = async (rawUserData) => {
             groupId: rawUserData.groupId
         })
 
-        console.log("check create user", create);
+        // console.log("check create user", create);
 
         return {
             EM: 'create user successfully',
@@ -166,8 +166,8 @@ const handleGetUserPagination = async (page, limit) => {
             nest: true,
         });
 
-        console.log("check count", count);
-        console.log("check rows", rows);
+        // console.log("check count", count);
+        // console.log("check rows", rows);
         let totalPage = Math.ceil(count / limit);
         let data = {
             totalRows: count,
@@ -205,7 +205,7 @@ const handleDeleteUser = async (userIndex) => {
         const data = await db.User.destroy({
             where: { id: userIndex }
         });
-        console.log("check delete data", data);
+        // console.log("check delete data", data);
         if (data === '1') {
             return {
                 EM: "delete user successfully",
@@ -246,7 +246,7 @@ const getUserById = async (userIndex) => {
         });
 
         if (user) {
-            console.log("check get user", user);
+            // console.log("check get user", user);
 
             return {
                 EM: 'get user succesfully',
@@ -288,7 +288,7 @@ const updateUserInfor = async (rawUserData) => {
                 },
             },
         );
-        console.log("check edit user from server", editUser[0]);
+        // console.log("check edit user from server", editUser[0]);
         if (editUser[0] === 1) {
             return {
                 EM: 'Edit user succesfully',

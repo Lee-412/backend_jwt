@@ -11,7 +11,7 @@ const testApi = (req, res) => {
 }
 
 const handleRegister = async (req, res) => {
-    console.log("check req", req.body);
+    // console.log("check req", req.body);
     try {
         //req.body: email, phone, username, password
         if (!req.body.email || !req.body.phone || !req.body.username) {
@@ -66,10 +66,11 @@ const handleRegister = async (req, res) => {
 }
 
 const handleLogin = async (req, res) => {
-    console.log(req.body);
+    // console.log(req.body);
 
     const data = await loginRegisterService.loginUser(req.body);
-    console.log("check login", data);
+    // console.log("check login", data);
+    res.cookie("access_token", data.DT.access_token, { httpOnly: true, maxAge: 60 * 60 * 1000 })
 
     if (data.EC === '-2') {
 
@@ -81,6 +82,7 @@ const handleLogin = async (req, res) => {
 
     }
     else {
+
         return res.status(200).json({
             EM: `${data.EM}`,
             EC: `${data.EC}`,

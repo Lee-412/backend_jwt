@@ -50,7 +50,7 @@ const registerNewUser = async (rawUserData) => {
         // check email, phone number are exist
         let isEmailExists = await checkEmailExists(rawUserData.email, 'email');
         if (isEmailExists === true) {
-            console.log('email is exitsts');
+            // console.log('email is exitsts');
             return {
                 EM: 'The Email is already exists',
                 EC: '-1',
@@ -60,7 +60,7 @@ const registerNewUser = async (rawUserData) => {
         }
         let isPhoneExists = await checkPhoneExists(rawUserData.phone, 'phone');
         if (isPhoneExists === true) {
-            console.log('phone is exitsts');
+            // console.log('phone is exitsts');
 
             return {
                 EM: 'The phone number is already exists',
@@ -120,7 +120,7 @@ const loginUser = async (rawUserData) => {
         });
         if (dataUser) {
             user = dataUser.get({ plain: true })
-            console.log("chekc user email", user);
+            // console.log("chekc user email", user);
 
             // check hash password
             // let hashPassWord = hashUserPassWord(rawUserData.password)
@@ -146,7 +146,6 @@ const loginUser = async (rawUserData) => {
                     EC: '0',
                     DT: {
                         access_token: jwt,
-                        data: roles
                     },
                 }
             }

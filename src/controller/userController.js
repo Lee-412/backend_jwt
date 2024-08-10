@@ -2,7 +2,9 @@ import userApiService from '../service/userApiService'
 
 const getUserListController = async (req, res) => {
     try {
-        console.log("check query", req.query);
+
+        // console.log("check query", req.query);
+        console.log("check log req user", req.user);
 
         if (req.query.page && req.query.limit) {
             let page = Number(req.query.page);
@@ -15,9 +17,9 @@ const getUserListController = async (req, res) => {
                     DT: '',
                 })
             }
-            console.log(page, limit);
+            // console.log(page, limit);
             const data = await userApiService.handleGetUserPagination(page, limit);
-            console.log("check log data", data);
+            // console.log("check log data", data);
 
             if (data.EC === '2') {
                 return res.status(500).json({
@@ -35,7 +37,7 @@ const getUserListController = async (req, res) => {
         }
         else {
             const data = await userApiService.handleGetUserList();
-            console.log("check log data", data);
+            // console.log("check log data", data);
 
             if (data.EC === '2') {
                 return res.status(500).json({
@@ -65,10 +67,10 @@ const getUserListController = async (req, res) => {
 const getUserController = async (req, res) => {
     try {
         let id = req.params.id;
-        console.log("check Id", id);
+        // console.log("check Id", id);
 
         const data = await userApiService.getUserById(id);
-        console.log("check log data get user by ID", data);
+        // console.log("check log data get user by ID", data);
 
         if (data.EC === '2') {
             return res.status(500).json({
@@ -138,7 +140,7 @@ const deleteUserController = async (req, res) => {
 
         const data = await userApiService.handleDeleteUser(req.body.id)
 
-        console.log("check data delete from server", data);
+        // console.log("check data delete from server", data);
 
         if (data.EC === '2') {
             return res.status(500).json({
@@ -171,9 +173,9 @@ const deleteUserController = async (req, res) => {
 
 const editUserController = async (req, res) => {
     try {
-        console.log("check req edit user", req.body);
+        // console.log("check req edit user", req.body);
         const data = await userApiService.updateUserInfor(req.body);
-        console.log("check log edit user", data);
+        // console.log("check log edit user", data);
 
         if (data.EC === '2') {
             return res.status(500).json({
