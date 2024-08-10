@@ -2,6 +2,8 @@ import e from 'express';
 import jwt, { decode } from 'jsonwebtoken';
 require("dotenv").config();
 
+const nonSecurePaths = ['/', '/register', '/login'];
+
 const createJWT = (payload) => {
     let token = null;
 
@@ -10,7 +12,10 @@ const createJWT = (payload) => {
 
         token = jwt.sign(
             payload,
-            key
+            key,
+            {
+                expiresIn: process.env.JWT_EXPIRESIN
+            }
         );
         // console.log("check token", token);
     } catch (error) {
@@ -35,6 +40,8 @@ const verifyJWT = (token) => {
 }
 
 const checkUserJWT = (req, res, next) => {
+    if (nonSecurePaths.includes(req.path)) return next();
+
     let cookies = req.cookies;
     if (cookies && cookies.access_token) {
         let token = cookies.access_token;
@@ -62,26 +69,33 @@ const checkUserJWT = (req, res, next) => {
     }
 }
 const checkUserPermission = (req, res, next) => {
+
+    if (nonSecurePaths.includes(req.path)) return next();
+
     if (req.user) {
         let email = req.user.email;
         let roles = req.user.role.Roles;
+        console.log(roles);
+
         if (!roles || roles.length === 0) {
             return res.status(401).json({
-                EM: "you don't have  permission to access this resource...",
+                EM: "Unauthorized the user. Please login...",
                 EC: -1,
                 DT: ''
             })
         }
 
-        let currenURL = req.path;
+        let currentURL = req.path;
 
-        let canAccess = roles.some(item => item.url == currenURL);
+        let canAccess = roles.some(item => item.url == currentURL);
+        console.log(currentURL);
+
         if (canAccess === true) {
             next();
         }
         else {
             return res.status(401).json({
-                EM: "you don't have  permission to access this resource...",
+                EM: "you don't have  permission to access this resource or perform this action.",
                 EC: -1,
                 DT: ''
             })

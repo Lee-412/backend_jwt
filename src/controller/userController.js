@@ -138,6 +138,9 @@ const createUserController = async (req, res) => {
 const deleteUserController = async (req, res) => {
     try {
 
+        console.log("check method delete: ", req.method);
+
+
         const data = await userApiService.handleDeleteUser(req.body.id)
 
         // console.log("check data delete from server", data);

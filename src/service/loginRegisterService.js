@@ -99,10 +99,7 @@ const registerNewUser = async (rawUserData) => {
             DT: 'not found'
         }
     }
-
-
 }
-
 
 
 const loginUser = async (rawUserData) => {
@@ -137,7 +134,6 @@ const loginUser = async (rawUserData) => {
                     email: user.email,
                     phone: user.phone,
                     role: roles,
-                    expiresIn: process.env.JWT_EXPIRESIN
                 }
 
                 const jwt = createJWT(payload)
@@ -146,6 +142,10 @@ const loginUser = async (rawUserData) => {
                     EC: '0',
                     DT: {
                         access_token: jwt,
+                        email: user.email,
+                        username: user.username,
+                        role: roles,
+
                     },
                 }
             }

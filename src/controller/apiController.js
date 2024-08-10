@@ -70,7 +70,9 @@ const handleLogin = async (req, res) => {
 
     const data = await loginRegisterService.loginUser(req.body);
     // console.log("check login", data);
-    res.cookie("access_token", data.DT.access_token, { httpOnly: true, maxAge: 60 * 60 * 1000 })
+    if (data && data.DT) {
+        res.cookie("access_token", data.DT.access_token, { httpOnly: true, maxAge: 60 * 60 * 1000 });
+    }
 
     if (data.EC === '-2') {
 
