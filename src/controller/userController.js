@@ -4,7 +4,7 @@ const getUserListController = async (req, res) => {
     try {
 
         // console.log("check query", req.query);
-        console.log("check log req user", req.user);
+        // console.log("check log req user", req.user);
 
         if (req.query.page && req.query.limit) {
             let page = Number(req.query.page);
@@ -143,8 +143,6 @@ const deleteUserController = async (req, res) => {
 
         const data = await userApiService.handleDeleteUser(req.body.id)
 
-        // console.log("check data delete from server", data);
-
         if (data.EC === '2') {
             return res.status(500).json({
                 EM: data.EM,
@@ -176,9 +174,7 @@ const deleteUserController = async (req, res) => {
 
 const editUserController = async (req, res) => {
     try {
-        // console.log("check req edit user", req.body);
         const data = await userApiService.updateUserInfor(req.body);
-        // console.log("check log edit user", data);
 
         if (data.EC === '2') {
             return res.status(500).json({
@@ -210,10 +206,25 @@ const editUserController = async (req, res) => {
     }
 }
 
+const getUserAccount = (req, res) => {
+    return res.status(200).json({
+        EM: 'oke',
+        EC: 0,
+        DT: {
+            access_token: req.token,
+            email: req.user.email,
+            username: req.user.username,
+            role: req.user.rolez,
+
+        },
+
+    })
+}
 module.exports = {
     getUserListController,
     getUserController,
     createUserController,
     deleteUserController,
-    editUserController
+    editUserController,
+    getUserAccount
 }

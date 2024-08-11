@@ -11,13 +11,7 @@ const router = express.Router();
  * @param {*} app : express app 
  */
 
-function checkUser(req, res, next) {
-    const nonSecurePaths = ['/', '/register', '/login'];
-    if (nonSecurePaths.includes(req.path)) return next();
 
-    //authenticate user
-    next();
-}
 const innitApiRoutes = (app) => {
 
     // path, handle function
@@ -28,6 +22,7 @@ const innitApiRoutes = (app) => {
     router.post("/register", apiController.handleRegister);
     router.post("/login", apiController.handleLogin)
 
+    router.get("/account", userController.getUserAccount)
     router.get("/users/get-user", userController.getUserListController);
     router.get("/users/get-user/:id", userController.getUserController);
     router.post("/users/create-user", userController.createUserController);

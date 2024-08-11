@@ -48,9 +48,12 @@ const checkUserJWT = (req, res, next) => {
         let decode = verifyJWT(token);
         if (decode) {
             req.user = decode;
+            req.token = token;
             next();
         }
         else {
+            console.log('here');
+
             return res.status(401).json({
                 EM: 'Not authenticated the user',
                 EC: -1,
@@ -70,7 +73,7 @@ const checkUserJWT = (req, res, next) => {
 }
 const checkUserPermission = (req, res, next) => {
 
-    if (nonSecurePaths.includes(req.path)) return next();
+    if (nonSecurePaths.includes(req.path) || req.path === '/account') return next();
 
     if (req.user) {
         let email = req.user.email;

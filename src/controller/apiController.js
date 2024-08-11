@@ -96,4 +96,5 @@ module.exports = {
     testApi,
     handleRegister,
     handleLogin,
+
 }
