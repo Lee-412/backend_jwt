@@ -17,6 +17,7 @@ const createJWT = (payload) => {
                 expiresIn: process.env.JWT_EXPIRESIN
             }
         );
+
         // console.log("check token", token);
     } catch (error) {
         console.log("check error create jwt", error);
@@ -38,13 +39,22 @@ const verifyJWT = (token) => {
     return decoded;
 
 }
-
+const extractToken = (req) => {
+    if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
+        return req.headers.authorization.split(' ')[1];
+    }
+    return null;
+}
 const checkUserJWT = (req, res, next) => {
     if (nonSecurePaths.includes(req.path)) return next();
 
     let cookies = req.cookies;
-    if (cookies && cookies.access_token) {
-        let token = cookies.access_token;
+    let bearerToken = extractToken(req);
+
+    if (cookies && cookies.access_token || bearerToken) {
+        let token = cookies && cookies.access_token ? cookies.access_token : bearerToken;
+        console.log('cookies', cookies);
+
         let decode = verifyJWT(token);
         if (decode) {
             req.user = decode;
@@ -61,6 +71,8 @@ const checkUserJWT = (req, res, next) => {
             })
         }
     }
+
+
     else {
         console.log("no cookie");
         return res.status(401).json({
