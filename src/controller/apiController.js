@@ -96,9 +96,32 @@ const handleLogin = async (req, res) => {
         })
     }
 }
+
+const handleLogout = async (req, res) => {
+
+    try {
+        console.log('hit here');
+
+        res.clearCookie("access_token");
+        return res.status(200).json({
+            EM: `logout successfully`,
+            EC: `0`,
+            DT: `No data`
+        })
+    } catch (error) {
+        console.log('hit here 2');
+
+        return res.status(500).json({
+            EM: `something wrong when server`,
+            EC: '2',
+            DT: `No data`
+        })
+    }
+}
+
 module.exports = {
     testApi,
     handleRegister,
     handleLogin,
-
+    handleLogout
 }

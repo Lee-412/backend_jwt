@@ -2,7 +2,7 @@ import e from 'express';
 import jwt, { decode } from 'jsonwebtoken';
 require("dotenv").config();
 
-const nonSecurePaths = ['/', '/register', '/login'];
+const nonSecurePaths = ['/', '/register', '/login', '/logout'];
 
 const createJWT = (payload) => {
     let token = null;

@@ -1,6 +1,9 @@
 import userApiService from '../service/userApiService'
+import roleApiService from '../service/roleApiService'
 
-const getUserListController = async (req, res) => {
+
+
+const getRoleListController = async (req, res) => {
     try {
 
         // console.log("check query", req.query);
@@ -64,7 +67,7 @@ const getUserListController = async (req, res) => {
     }
 }
 
-const getUserController = async (req, res) => {
+const getRoleController = async (req, res) => {
     try {
         let id = req.params.id;
         // console.log("check Id", id);
@@ -95,10 +98,16 @@ const getUserController = async (req, res) => {
     }
 }
 
-const createUserController = async (req, res) => {
+const createRoleController = async (req, res) => {
 
     try {
-        const data = await userApiService.handleCreateNewUser(req.body)
+
+        console.log(req.body);
+
+        const data = await roleApiService.handleCreateNewRole(req.body)
+
+        console.log(data);
+
         if (data.EC === '2') {
             return res.status(500).json({
                 EM: data.EM,
@@ -116,14 +125,7 @@ const createUserController = async (req, res) => {
         return res.status(200).json({
             EM: data.EM,
             EC: data.EC,
-            DT: {
-                email: data.DT.email,
-                phone: data.DT.phone,
-                sex: data.DT.sex,
-                address: data.DT.address,
-                username: data.DT.username,
-                id: data.DT.id
-            },
+            DT: data.DT,
         })
     } catch (error) {
         console.log(error);
@@ -135,7 +137,7 @@ const createUserController = async (req, res) => {
     }
 }
 
-const deleteUserController = async (req, res) => {
+const deleteRoleController = async (req, res) => {
     try {
 
         console.log("check method delete: ", req.method);
@@ -172,7 +174,7 @@ const deleteUserController = async (req, res) => {
     }
 }
 
-const editUserController = async (req, res) => {
+const editRoleController = async (req, res) => {
     try {
         const data = await userApiService.updateUserInfor(req.body);
 
@@ -206,29 +208,14 @@ const editUserController = async (req, res) => {
     }
 }
 
-const getUserAccount = (req, res) => {
-    return res.status(200).json({
-        EM: 'oke',
-        EC: 0,
-        DT: {
-            access_token: req.token,
-            email: req.user.email,
-            username: req.user.username,
-            role: req.user.rolez,
-        },
 
-    })
-}
 
-const getRole = () => {
 
-}
 module.exports = {
-    getUserListController,
-    getUserController,
-    createUserController,
-    deleteUserController,
-    editUserController,
-    getUserAccount,
-    getRole
+    getRoleListController,
+    getRoleController,
+    createRoleController,
+    deleteRoleController,
+    editRoleController,
+
 }
