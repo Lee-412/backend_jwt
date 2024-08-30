@@ -21,7 +21,7 @@ const getRoleListController = async (req, res) => {
                 })
             }
             // console.log(page, limit);
-            const data = await userApiService.handleGetUserPagination(page, limit);
+            const data = await roleApiService.handleGetRolePagination(page, limit);
             // console.log("check log data", data);
 
             if (data.EC === '2') {
@@ -39,7 +39,7 @@ const getRoleListController = async (req, res) => {
 
         }
         else {
-            const data = await userApiService.handleGetUserList();
+            const data = await roleApiService.handleGetRoleList();
             // console.log("check log data", data);
 
             if (data.EC === '2') {
@@ -102,7 +102,7 @@ const createRoleController = async (req, res) => {
 
     try {
 
-        console.log(req.body);
+        // console.log(req.body);
 
         const data = await roleApiService.handleCreateNewRole(req.body)
 
@@ -137,13 +137,49 @@ const createRoleController = async (req, res) => {
     }
 }
 
+// const deleteRoleController = async (req, res) => {
+//     try {
+
+//         console.log("check method delete: ", req.method);
+
+
+//         const data = await roleApiService.handleDeleteRole(req.body.id)
+
+//         if (data.EC === '2') {
+//             return res.status(500).json({
+//                 EM: data.EM,
+//                 EC: data.EC,
+//                 DT: data.DT,
+//             })
+//         }
+//         if (data.EC === '1') {
+//             return res.status(200).json({
+//                 EM: data.EM,
+//                 EC: data.EC,
+//                 DT: data.DT,
+//             })
+//         }
+//         return res.status(200).json({
+//             EM: data.EM,
+//             EC: data.EC,
+//             DT: data.DT,
+//         })
+//     } catch (error) {
+//         console.log(error);
+//         return res.status(500).json({
+//             EM: 'Something wrong in server',
+//             EC: '-2',
+//             DT: '',
+//         })
+//     }
+// }
 const deleteRoleController = async (req, res) => {
     try {
 
-        console.log("check method delete: ", req.method);
+        console.log("check data delete: ", req.body);
 
 
-        const data = await userApiService.handleDeleteUser(req.body.id)
+        const data = await roleApiService.handleDeleteRole(req.body.data)
 
         if (data.EC === '2') {
             return res.status(500).json({
@@ -173,7 +209,6 @@ const deleteRoleController = async (req, res) => {
         })
     }
 }
-
 const editRoleController = async (req, res) => {
     try {
         const data = await userApiService.updateUserInfor(req.body);
@@ -207,8 +242,6 @@ const editRoleController = async (req, res) => {
 
     }
 }
-
-
 
 
 module.exports = {
